@@ -1,0 +1,6 @@
+env: local
+logger:
+  level: debug
+http:
+  host: localhost
+  port: 3111

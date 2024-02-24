@@ -1,0 +1,9 @@
+package deps
+
+import "gofinance/web/view"
+
+templ Script(name string) {
+	if view.GetViewCtx(ctx).UsingDep(name) {
+		<script src={ GetLink(name) }></script>
+	}
+}

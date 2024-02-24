@@ -1,0 +1,102 @@
+#!/bin/bash
+
+APP_NAME="gofinance_app"
+BUILD_DIR="../build"
+CONFIG_FILE=".config.dev.yaml"
+ENTRY="./cmd/start_web_app.go"
+
+if [ ! $(which argc) ]
+then
+    echo "Installing argc..."
+    brew install argc
+fi
+
+# @cmd Build code
+build() { 
+    (
+        cd $APP_NAME;
+        go build -o $BUILD_DIR/$APP_NAME $ENTRY
+    )
+}
+
+# @cmd Start development server
+start() {
+    air
+} 
+
+# @cmd Code generation
+gen() { :; }
+
+# @cmd Does all code generation
+gen::all() {
+    gen::views
+}
+
+# @cmd Generate templates
+# @option -f --file
+gen::views() {
+    if [ $argc_file ]
+    then
+        templ generate -f $argc_file
+    else
+        templ generate
+    fi
+
+}
+
+# @cmd DB
+db() { :; }
+
+# @cmd Simply applies changes without creating a migration, useful for testing
+db::apply() {
+    atlas schema apply --env local
+}
+
+# @cmd DB migration
+db::migrate() { :; }
+
+# @cmd Simply applies changes without creating a migration, useful for testing
+db::migrate::diff() {
+    atlas migrate diff --env local
+}
+
+# @cmd Deletes current build
+clean() {
+    rm -rf ./build
+}
+
+# @cmd Runs tests
+test() {
+    (
+        cd $APP_NAME;
+        go test -v -timeout 30s -coverprofile=cover.out -cover -p 1 ./...
+        go tool cover -html=cover.out -o coverage.html
+    )
+}
+
+# @cmd Security tests
+security() {
+    (
+        cd $APP_NAME;
+        gosec ./
+    )
+}
+
+# @cmd Run lint
+lint() {
+    (
+        cd $APP_NAME;
+        golangci-lint run ./
+    )
+}
+
+# @cmd Setup dependencies of the project, like Templ, air and atlas
+setup() {
+    go install github.com/a-h/templ/cmd/templ@latest
+    go install github.com/cosmtrek/air@latest
+
+    # This will not work for windows
+    curl -sSf https://atlasgo.sh | sh
+}
+# https://github.com/sigoden/argc
+eval "$(argc --argc-eval "$0" "$@")"

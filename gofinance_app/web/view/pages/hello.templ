@@ -1,0 +1,11 @@
+package pages
+
+import "gofinance/web/view/shell"
+
+templ Test(name string) {
+	@BasePage(BasePageArgs{}) {
+		@shell.Shell(shell.ShellArgs{}) {
+			<div>Hello there, { name }</div>
+		}
+	}
+}

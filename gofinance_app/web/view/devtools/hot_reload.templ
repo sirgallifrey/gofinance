@@ -1,0 +1,17 @@
+package devtools
+
+import (
+	"gofinance/web/view/deps"
+)
+
+templ HotReload(id string, reload bool) {
+	@deps.UseDep(deps.HTMX_WS)
+	<form id="hot-reload-content" hx-ext="ws" ws-connect="/ws/hotreload" ws-send hx-trigger="htmx:wsOpen" style="display:none">
+		<input name="id" type="text" value={ id }/>
+		if reload {
+			<script>console.log('Hot reloading...');location.reload();</script>
+		} else {
+			<script>console.log('Not reloading, id: {id}')</script>
+		}
+	</form>
+}

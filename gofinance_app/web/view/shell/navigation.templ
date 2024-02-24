@@ -1,0 +1,58 @@
+package shell
+
+type NavigationArgs struct {
+	active string
+}
+
+type NavigationItemArgs struct {
+	label  string
+	active bool
+	href   string
+}
+
+css navigationStyle() {
+	min-width: 240px;
+}
+
+templ navigationItem(args NavigationItemArgs) {
+	<li class="nav-item">
+		<a
+ 			class={ "nav-link", templ.KV("active", args.active) }
+ 			if args.active {
+				aria-current="page"
+			}
+ 			href={ templ.SafeURL(args.href) }
+		>{ args.label }</a>
+	</li>
+}
+
+templ sidebar() {
+	<nav class={ "navbar bg-dark justify-content-start align-items-start" } data-bs-theme="dark">
+		<div class="container-fluid flex-column justify-content-start align-items-start">
+			{ children... }
+		</div>
+	</nav>
+}
+
+templ Navigation(args NavigationArgs) {
+	@sidebar() {
+		<hr/>
+		<ul class={ navigationStyle(), "navbar-nav nav-pills flex-column mb-auto" }>
+			@navigationItem(NavigationItemArgs{
+            label: "Active",
+            href: "#",
+            active: args.active == "active",
+        })
+			@navigationItem(NavigationItemArgs{
+            label: "Link",
+            href: "#",
+            active: args.active == "link",
+        })
+			@navigationItem(NavigationItemArgs{
+            label: "Other",
+            href: "#",
+            active: args.active == "other",
+        })
+		</ul>
+	}
+}

@@ -1,0 +1,15 @@
+{
+    "editor.formatOnSave": true,
+    "[templ]": {
+        "editor.defaultFormatter": "a-h.templ"
+    },
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": "\\.templ$",
+                "cmd": "./cli gen views -f ${file}"
+            }
+        ]
+    },
+    "cSpell.words": ["gofinance", "pflag", "zerolog"]
+}
