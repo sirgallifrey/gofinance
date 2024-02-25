@@ -6,11 +6,11 @@ env "local" {
 
   // Define the URL of the database which is managed
   // in this environment.
-  url = "sqlite://.database.db"
+  url = "postgres://postgres:password@localhost:5432/app_data?sslmode=disable"
 
-  // Define the URL of the Dev Database for this environment
+  // Define the URL of the Dev Database for this environment (User For schema comparison)
   // See: https://atlasgo.io/concepts/dev-database
-  dev = "sqlite://.dev-database.db"
+  dev = "postgres://postgres:password@localhost:5432/atlas_dev?sslmode=disable"
 
   migration {
     // URL where the migration directory resides.
