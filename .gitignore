@@ -19,7 +19,7 @@
 
 # Go workspace file
 build/
+.build/
 gofinance_app/view/**/*_templ.go
 tmp/
-.database.db
-.dev-database.db
+.tmp/

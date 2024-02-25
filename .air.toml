@@ -1,13 +1,13 @@
 root = "."
 testdata_dir = "testdata"
-tmp_dir = "tmp"
+tmp_dir = ".tmp"
 
 [build]
   args_bin = ["-c", ".config.local.yaml"]
   bin = "./build/gofinance_app"
   cmd = "./cli build"
   delay = 1000
-  exclude_dir = ["assets", "tmp", "vendor", "testdata"]
+  exclude_dir = ["assets", "tmp", "vendor", "testdata", ".vscode", ".build", ".tmp"]
   exclude_file = []
   exclude_regex = ["_test.go"]
   exclude_unchanged = false
