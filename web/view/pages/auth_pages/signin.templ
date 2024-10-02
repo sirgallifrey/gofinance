@@ -1,0 +1,50 @@
+package auth_pages
+
+import (
+	"requirementor/web/view/ui"
+	"requirementor/web/view/pages"
+)
+
+templ signInForm() {
+	<form hx-post="/signin">
+		<div class="mb-3">
+			@ui.Input{
+				Id:          "email",
+				Type:        "email",
+				Label:       "Email address",
+				Placeholder: "name@example.com",
+			}.Comp()
+		</div>
+		<div class="mb-3">
+			@ui.Input{
+				Id:    "password",
+				Type:  "password",
+				Label: "Password",
+			}.Comp()
+		</div>
+		<div class="mb-3">
+			@ui.Input{
+				Id:    "repeat-password",
+				Type:  "password",
+				Label: "Repeat your password",
+			}.Comp()
+		</div>
+		<div class="d-grid">
+			<button class="btn btn-primary" type="submit">Sign In</button>
+		</div>
+	</form>
+}
+
+templ SignInPage() {
+	@pages.BasePage{
+		Title: "Sign-In",
+	}.Comp() {
+		<div class="container">
+			<div class="row min-vh-100 align-items-center justify-content-center">
+				<div class="col-lg-3">
+					@signInForm()
+				</div>
+			</div>
+		</div>
+	}
+}

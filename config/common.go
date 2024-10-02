@@ -40,7 +40,7 @@ type Postgres struct {
 	SslMode           string        `json:"ssl_mode" yaml:"sslMode" env:"SSL_MODE" env-default:"disable"`
 	Db                string        `json:"db" yaml:"db" env:"DB" env-default:"postgres"`
 	User              string        `json:"user" yaml:"user" env:"USER" env-default:"postgres"`
-	Password          string        `json:"password" yaml:"password" env:"PASSWORD" env-default:"postgres"`
+	Password          string        `json:"password" yaml:"password" env:"PASSWORD" env-default:"password"`
 	MaxConns          int           `json:"max_conns" yaml:"maxConns" env:"MAX_CONNS" env-default:"10"`
 	MinConns          int           `json:"min_conns" yaml:"minConns" env:"MIN_CONNS" env-default:"2"`
 	MaxConnLifetime   time.Duration `json:"max_conn_lifetime" yaml:"maxConnLifetime" env:"MAX_CONN_LIFETIME" env-default:"10m"`
@@ -83,21 +83,4 @@ func (p Postgres) ConfigURL(args ...string) string {
 		url += fmt.Sprintf("&%s", v)
 	}
 	return url
-}
-
-type Redis struct {
-	Host     string `json:"host" yaml:"host" env:"HOST" env-default:"127.0.0.1"`
-	Port     int32  `json:"port" yaml:"port" env:"PORT" env-default:"6379"`
-	Username string `json:"username" yaml:"username" env:"USERNAME" env-default:""`
-	Password string `json:"password" yaml:"password" env:"PASSWORD" env-default:""`
-	DB       int    `json:"db" yaml:"db" env:"DB" env-default:"0"`
-}
-
-func (redis Redis) Addr() string {
-	return fmt.Sprintf("%s:%v", redis.Host, redis.Port)
-}
-
-type Swagger struct {
-	Host     string `json:"host" yaml:"host" env:"HOST" env-default:"127.0.0.1:8888"`
-	BasePath string `json:"base_path" yaml:"basePath" env:"BASE_PATH" env-default:"/api"`
 }

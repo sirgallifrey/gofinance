@@ -1,22 +1,22 @@
 package pages
 
-import "gofinance/web/view/deps"
-import "gofinance/web/view/devtools"
+import "requirementor/web/view/deps"
+import "requirementor/web/view/devtools"
 
-type BasePageArgs struct {
-	title string
+type BasePage struct {
+	Title string
 }
 
-templ BasePage(args BasePageArgs) {
+templ (a BasePage) Comp() {
 	// <!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
-			<title>{ args.title }</title>
+			<title>{ a.Title }</title>
 			<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
 		</head>
-		<body>
+		<body class="min-vh-100">
 			{ children... }
 			@devtools.HotReload("", false)
 			<script src="https://unpkg.com/htmx.org@1.9.10"></script>

@@ -11,10 +11,23 @@ services:
         volumes:
             - ./database/dev_database_init:/docker-entrypoint-initdb.d
 
-    pgadmin4:
-        image: dpage/pgadmin4
+    dbgate:
+        image: dbgate/dbgate
+        restart: always
         ports:
-            - "8080:80"
+            - 4009:3000
+        volumes:
+            - dbgate-data:/root/.dbgate
         environment:
-            - PGADMIN_DEFAULT_EMAIL=admin@example.com
-            - PGADMIN_DEFAULT_PASSWORD=password
+            CONNECTIONS: con1
+
+            LABEL_con1: app_data
+            SERVER_con1: db
+            USER_con1: postgres
+            PASSWORD_con1: password
+            PORT_con1: 5432
+            ENGINE_con1: postgres@dbgate-plugin-postgres
+
+volumes:
+    dbgate-data:
+        driver: local

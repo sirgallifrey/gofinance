@@ -4,7 +4,7 @@ tmp_dir = ".tmp"
 
 [build]
   args_bin = ["-c", ".config.local.yaml"]
-  bin = "./build/gofinance_app"
+  bin = "./.build/requirementor"
   cmd = "./cli build"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata", ".vscode", ".build", ".tmp"]

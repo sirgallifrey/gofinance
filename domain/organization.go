@@ -1,10 +1,9 @@
 package domain
 
-type Organization struct {
-	id   string
-	name string
-}
+import "github.com/uptrace/bun"
 
-type NewOrganization struct {
-	name string
+type Organization struct {
+	bun.BaseModel `bun:"table:organizations,alias:o"`
+	Id            string `bun:",pk"`
+	Name          string
 }

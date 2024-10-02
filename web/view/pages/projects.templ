@@ -1,0 +1,56 @@
+package pages
+
+import "requirementor/domain"
+import "requirementor/web/view/shell"
+import "requirementor/web/view/ui"
+import "requirementor/web/view/htmx"
+
+type ProjectsPage struct {
+	Projects []domain.Project
+}
+
+templ (a ProjectsPage) Comp() {
+	@BasePage{}.Comp() {
+		@shell.Shell{}.Comp() {
+			if a.Projects != nil && len(a.Projects) > 0 {
+				<table>
+					<thead>
+						<tr>
+							<th>
+								Id
+							</th>
+							<th>
+								Name
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						for _, p := range a.Projects {
+							<tr>
+								<td>
+									{ p.Id }
+								</td>
+								<td>{ p.Name }</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			} else {
+				You don't have projects yet
+			}
+			@NewProjectForm{}.Comp()
+		}
+	}
+}
+
+type NewProjectForm struct {
+}
+
+templ (a NewProjectForm) Comp() {
+	<form { hx.Hx(hx.Post("/projects")).ToAttr()... }>
+		@ui.Input{Id: "project-name", Label: "Project Name"}.Comp()
+		@ui.Button{ColorName: ui.Primary}.Comp() {
+			Create New Project
+		}
+	</form>
+}

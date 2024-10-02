@@ -1,7 +1,11 @@
 package pages
 
+import "requirementor/web/view/shell"
+
 templ Dashboard(name string) {
-	@BasePage(BasePageArgs{}) {
-		<div>Hello there, { name } nice to meet you</div>
+	@BasePage{}.Comp() {
+		@shell.Shell{}.Comp() {
+			<div>Hello there, { name } nice to meet you</div>
+		}
 	}
 }

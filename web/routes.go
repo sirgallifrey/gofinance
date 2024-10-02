@@ -1,7 +1,7 @@
 package web
 
 import (
-	"gofinance/web/controllers"
+	"requirementor/web/controllers"
 
 	"github.com/gofiber/fiber/v2"
 )

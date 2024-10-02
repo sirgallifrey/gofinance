@@ -2,7 +2,7 @@ package web
 
 import (
 	"context"
-	"gofinance/web/view/devtools"
+	"requirementor/web/view/devtools"
 	"strings"
 
 	"github.com/gofiber/contrib/websocket"

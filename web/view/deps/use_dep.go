@@ -2,8 +2,8 @@ package deps
 
 import (
 	"context"
-	"gofinance/web/view"
 	"io"
+	"requirementor/web/view"
 
 	"github.com/a-h/templ"
 )

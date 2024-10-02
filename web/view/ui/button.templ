@@ -1,0 +1,18 @@
+package ui
+
+type Button struct {
+	Id        string
+	Attrs     map[string]any
+	Class     templ.CSSClasses
+	ColorName ColorName
+}
+
+func (a Button) getColoClass() string {
+	return "btn-" + string(a.ColorName)
+}
+
+templ (a Button) Comp() {
+	<button class={ "btn", "btn-"+string(a.ColorName), a.Class } { a.Attrs... }>
+		{ children... }
+	</button>
+}

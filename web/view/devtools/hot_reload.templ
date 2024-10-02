@@ -1,7 +1,7 @@
 package devtools
 
 import (
-	"gofinance/web/view/deps"
+	"requirementor/web/view/deps"
 )
 
 templ HotReload(id string, reload bool) {
@@ -9,7 +9,7 @@ templ HotReload(id string, reload bool) {
 	<form id="hot-reload-content" hx-ext="ws" ws-connect="/ws/hotreload" ws-send hx-trigger="htmx:wsOpen" style="display:none">
 		<input name="id" type="text" value={ id }/>
 		if reload {
-			<script>console.log('Hot reloading...');location.reload();</script>
+			<script>console.log('Hot reloading...');setTimeout(() => {location.reload()}, 0);</script>
 		} else {
 			<script>console.log('Not reloading, id: {id}')</script>
 		}

@@ -1,9 +1,12 @@
 version: "2"
 sql:
-  - engine: "sqlite"
+  - engine: "postgresql"
     queries: "database/queries"
     schema: "database/schema.sql"
     gen:
       go:
-        package: "db_repository"
-        out: "gofinance_app/db_repository"
+        package: "repo"
+        out: "repositories"
+        sql_package: "pgx/v5"
+        emit_interface: true
+        emit_prepared_queries: true

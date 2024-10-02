@@ -1,82 +1,82 @@
-
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- create "users" table
 CREATE TABLE users (
-    id VARCHAR(26) NOT NULL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) NOT NULL,
     -- TODO: we need to change collation to make email case insensitive
     email VARCHAR(255) NOT NULL UNIQUE,
-    passwordHash VARCHAR(255) NOT NULL,
-    createdAt TIMESTAMP NOT NULL,
-    updatedAt TIMESTAMP NOT NULL
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc'),
+    updated_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 
 -- create "organization" table
 CREATE TABLE organizations (
-    id VARCHAR(26) NOT NULL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) not NULL,
-    deletedAt TIMESTAMP,
-    createdAt TIMESTAMP NOT NULL,
-    updatedAt TIMESTAMP NOT NULL
+    deleted_at TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc'),
+    updated_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 
--- create "organizationMembers" table
-CREATE TABLE organizationMembers (
-    id VARCHAR(26) NOT NULL PRIMARY KEY,
-    orgId VARCHAR(26) NOT NULL,
-    userId VARCHAR(26) NOT NULL,
+-- create "organization_members" table
+CREATE TABLE organization_members (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    org_id UUID NOT NULL,
+    user_id UUID NOT NULL,
     -- 30 is default member role
     role INT NOT NULL DEFAULT 30,
-    createdAt TIMESTAMP NOT NULL,
-    updatedAt TIMESTAMP NOT NULL,
-    FOREIGN KEY (orgId) REFERENCES organizations(id) ON DELETE CASCADE,
-    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+    created_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc'),
+    updated_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc'),
+    FOREIGN KEY (org_id) REFERENCES organizations(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- create "accounts" table
-CREATE TABLE accounts (
-    id VARCHAR(26) NOT NULL PRIMARY KEY,
-    orgId VARCHAR(26) NOT NULL,
-    name VARCHAR(255) not NULL,
-    description TEXT,
-    owned BOOLEAN NOT NULL,
-    createdAt TIMESTAMP NOT NULL,
-    updatedAt TIMESTAMP NOT NULL,
-    FOREIGN KEY (orgId) REFERENCES organizations(id) ON DELETE RESTRICT
+-- create "projects" table
+CREATE TABLE projects (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    -- org_id UUID NOT NULL,
+    -- user_id UUID NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc'),
+    updated_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
+    -- FOREIGN KEY (org_id) REFERENCES organizations(id) ON DELETE CASCADE,
+    -- FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- create "transaction" table
-CREATE TABLE transactions (
-    id VARCHAR(26) NOT NULL PRIMARY KEY,
-    orgId VARCHAR(26) NOT NULL,
-    createdUserId VARCHAR(26) NOT NULL,
-    name VARCHAR(255) not NULL,
-    description TEXT,
-    createdAt TIMESTAMP NOT NULL,
-    updatedAt TIMESTAMP NOT NULL,
-    deletedAt TIMESTAMP,
+-- create "features" table
+CREATE TABLE features (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    num INT NOT NULL UNIQUE,
+    project_id UUID NOT NULL,
+    -- org_id UUID NOT NULL,
+    -- user_id UUID NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc'),
+    updated_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc'),
+    FOREIGN KEY (projectId) REFERENCES projects(id) ON DELETE CASCADE
 
-    FOREIGN KEY (orgId) REFERENCES organizations(id) ON DELETE RESTRICT,
-    FOREIGN KEY (createdUserId) REFERENCES users(id) ON DELETE RESTRICT
+    -- FOREIGN KEY (org_id) REFERENCES organizations(id) ON DELETE CASCADE,
+    -- FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE transactionDetails (
-    id VARCHAR(26) NOT NULL PRIMARY KEY,
-    orgId VARCHAR(26) NOT NULL,
-    transactionId VARCHAR(26) NOT NULL,
-    createdUserId VARCHAR(26) NOT NULL,
-
-    name VARCHAR(255) not NULL,
+-- create "features" table
+CREATE TABLE requirements (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    num INT NOT NULL UNIQUE,
+    feature_id UUID NOT NULL,
+    parent_id UUID,
+    -- org_id UUID NOT NULL,
+    -- user_id UUID NOT NULL,
+    name VARCHAR(255) NOT NULL,
     description TEXT,
-    product TEXT,
-    quantity DECIMAL,
-    centsValue INTEGER,
+    non_functional_type VARCHAR(40),
+    created_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc'),
+    updated_at TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc'),
+    FOREIGN KEY (feature_id) REFERENCES features(id) ON DELETE CASCADE,
+    FOREIGN KEY (parent_id) REFERENCES requirements(id) ON DELETE CASCADE
 
-    createdAt TIMESTAMP NOT NULL,
-    updatedAt TIMESTAMP NOT NULL,
-    deletedAt TIMESTAMP,
-
-    FOREIGN KEY (orgId) REFERENCES organizations(id) ON DELETE RESTRICT,
-    FOREIGN KEY (transactionId) REFERENCES transactions(id) ON DELETE RESTRICT,
-    FOREIGN KEY (createdUserId) REFERENCES users(id) ON DELETE RESTRICT
+    -- FOREIGN KEY (org_id) REFERENCES organizations(id) ON DELETE CASCADE,
+    -- FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

@@ -1,0 +1,56 @@
+package ui
+
+const (
+	helpSuffix  = "-help-text"
+	errorSuffix = "-error-text"
+)
+
+type Input struct {
+	Id          string
+	Attrs       map[string]any
+	Class       templ.CSSClasses
+	LabelClass  templ.CSSClasses
+	Err         string
+	HelpText    string
+	Label       string
+	Name        string
+	Placeholder string
+	Type        string
+}
+
+func (a Input) GetType() string {
+	if a.Type != "" {
+		return a.Type
+	}
+	return "text"
+}
+
+func (a Input) HasHelpText() bool {
+	return a.HelpText != "" && a.Err != ""
+}
+
+templ (a Input) Comp() {
+	<label for={ a.Id } class={ a.LabelClass, "form-label" }>{ a.Label }</label>
+	<input
+		type={ a.GetType() }
+		class={ a.Class, "form-control" }
+		id={ a.Id }
+		if a.HelpText != "" {
+			aria-describedby={ a.Id + helpSuffix }
+		}
+		if a.Placeholder != "" {
+			placeholder={ a.Placeholder }
+		}
+		{ a.Attrs... }
+	/>
+	if a.HelpText != "" {
+		<div id={ a.Id + helpSuffix } class="form-text">
+			{ a.HelpText }
+		</div>
+	}
+	if a.Err != "" {
+		<div id={ a.Id + errorSuffix } class="form-text text-danger">
+			{ a.Err }
+		</div>
+	}
+}

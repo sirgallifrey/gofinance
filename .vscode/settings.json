@@ -8,8 +8,12 @@
             {
                 "match": "\\.templ$",
                 "cmd": "./cli gen views -f ${file}"
+            },
+            {
+                "match": "\\.templ$",
+                "cmd": "templ fmt ${file}"
             }
         ]
     },
-    "cSpell.words": ["gofinance", "pflag", "zerolog"]
+    "cSpell.words": ["requirementor", "pflag", "zerolog"]
 }

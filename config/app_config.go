@@ -1,8 +1,11 @@
 package config
 
 import (
+	"log"
+
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/pkg/errors"
+	"github.com/spf13/pflag"
 )
 
 type AppCfg struct {
@@ -11,8 +14,6 @@ type AppCfg struct {
 	HTTP     HTTP     `json:"http" yaml:"http" env-prefix:"HTTP_"`
 	TLS      TLS      `json:"tls" yaml:"tls" env-prefix:"TLS_"`
 	Postgres Postgres `json:"postgres" yaml:"postgres" env-prefix:"POSTGRES_"`
-	Redis    Redis    `json:"redis" yaml:"redis" env-prefix:"REDIS_"`
-	Swagger  Swagger  `json:"swagger" yaml:"swagger" env-prefix:"SWAGGER_"`
 }
 
 func (config AppCfg) IsLocal() bool {
@@ -34,4 +35,18 @@ func NewAppCfg(filepath string) (*AppCfg, error) {
 		}
 	}
 	return &c, err
+}
+
+// TODO: need a shareable way to define config patch between commands that is not under this module
+func LoadConfig() *AppCfg {
+	filepath := pflag.StringP("config", "c", "", "configuration filepath (default: None)")
+	pflag.Parse()
+	// ________________________________________________________________________
+	// Load config
+	cfg, err := NewAppCfg(*filepath)
+	if err != nil {
+		log.Fatalf("cannot load config: %s", err)
+		panic("Could not load config. Shutting down")
+	}
+	return cfg
 }

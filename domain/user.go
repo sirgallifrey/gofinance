@@ -1,9 +1,11 @@
 package domain
 
+import "github.com/uptrace/bun"
+
 type User struct {
-	id        string
-	name      string
-	surname   string
-	user_name string
-	email     string
+	bun.BaseModel `bun:"table:users,alias:u"`
+	Id            string `bun:",pk"`
+	Name          string
+	Email         string
+	PasswordHash  string
 }

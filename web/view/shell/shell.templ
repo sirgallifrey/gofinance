@@ -1,7 +1,5 @@
 package shell
 
-type ShellArgs struct{}
-
 css mainStyle() {
 	display: flex;
 	flex-wrap: nowrap;
@@ -11,11 +9,13 @@ css mainStyle() {
 	overflow-y: hidden;
 }
 
-templ Shell(args ShellArgs) {
-	<main class={ mainStyle() }>
+type Shell struct{}
+
+templ (s Shell) Comp() {
+	<div class={ mainStyle() }>
 		@Navigation(NavigationArgs{})
-		<div class="flex-grow-1">
+		<main class="flex-grow-1 container-fluid">
 			{ children... }
-		</div>
-	</main>
+		</main>
+	</div>
 }
